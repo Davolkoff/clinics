@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if user.is_staff %}
+        <h2>Добавить врача</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Создать врача</button>
+        </form>
+    {% else %}
+        <p>У вас нет прав для добавления врача.</p>
+    {% endif %}
+{% endblock content %}

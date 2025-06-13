@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Показать информацию</button>
+    </form>
+
+    {% if doctor %}
+        <div class="doctor-info" style="display: flex; flex-direction: row; align-items: center;gap: 10vw;">
+            <div class="text-info">
+                <h2>Информация о враче</h2>
+                <p><strong>ФИО:</strong> {{ doctor.last_name }} {{ doctor.first_name }} {{ doctor.middle_name }}</p>
+                <p><strong>Клиника:</strong> {{ clinic.name }} ({{ clinic.address }})</p>
+                <p><strong>Часы работы:</strong> {{ clinic.working_hours }}</p>
+
+                <h3>Специальности:</h3>
+                <ul>
+                    {% for speciality in specialities %}
+                        <li>{{ speciality.speciality.name }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Оказываемые услуги:</h3>
+                <ul>
+                    {% for service in services %}
+                        <li>{{ service.name }} — {{ service.price }} руб.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="photo">
+                {% if doctor.photo %}
+                    <img src="{{ doctor.photo.url }}" 
+                        alt="{{ doctor.last_name }} {{ doctor.first_name }}" 
+                        class="doctor-photo"
+                        height="10%"
+                        style="border-radius: 10%;"
+                    >
+                {% else %}
+                    <div class="no-photo-placeholder">
+                        Нет фото
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{% url 'download_doctor_info' doctor_id=doctor.doctor_id %}">Скачать информацию</a>
+    {% endif %}
+{% endblock content %}

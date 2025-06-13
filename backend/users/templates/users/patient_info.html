@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if form %}
+        <!-- Форма отображается только для врачей -->
+        <form method="get">
+            {{ form.as_p }}
+            <button type="submit">Показать информацию</button>
+        </form>
+    {% endif %}
+
+    {% if selected_patient %}
+        <h2>Информация о пациенте: {{ selected_patient }}</h2>
+        <h3>Приёмы:</h3>
+        <ul>
+            {% for appointment in appointments %}
+                <li>
+                    Дата: {{ appointment.appointment_date }} <br>
+                    Время: {{ appointment.appointment_time }} <br>
+                    Доктор: {{ appointment.doctor }}
+                    <h4>Диагнозы:</h4>
+                    <ul>
+                        {% for diagnosis in appointment.diagnosis_set.all %}
+                            <li>{{ diagnosis.diagnosis_name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <h4>Услуги:</h4>
+                    <ul>
+                        {% for service in appointment.serviceforappointment_set.all %}
+                            <li>{{ service.service.name }} ({{ service.quantity }})</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h3>Анализы:</h3>
+        <ul>
+            {% for analysis in analyses %}
+                <li>{{ analysis.analysis_name }} - {{ analysis.result }} ({{ analysis.analysis_date }})</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Кнопка для скачивания информации -->
+        <form method="get" action="{% url 'download_patient_info' patient_id=selected_patient.patient_id %}">
+            <button type="submit">Скачать информацию</button>
+        </form>
+    {% endif %}
+{% endblock content %}
