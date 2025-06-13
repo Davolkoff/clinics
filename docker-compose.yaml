@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: main_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 12345678
+    # volumes:
+    #   - ./dbdata:/var/lib/mysql/
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"  # AMQP protocol port
+      - "15672:15672"  # Web management UI port
+    # volumes:
+    #   - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=password
+    restart: unless-stopped
+
+
+volumes:
+  rabbitmq_data:
