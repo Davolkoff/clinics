@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Страницы</h1>
+
+<ul>
+    <li><a href="{% url 'create_doctor' %}">Создание доктора</a></li>
+    <li><a href="{% url 'reviews' %}">Отзывы</a></li>
+    <li><a href="{% url 'clinic_info' %}">Информация о поликлинике</a></li>
+    <li><a href="{% url 'doctor_info' %}">Информация о докторе</a></li>
+    <li><a href="{% url 'appointment_info' %}">Информация о приеме</a></li>
+    <li><a href="{% url 'doctors_by_service' %}">Доктора, оказывающие услугу</a></li>
+    <li><a href="{% url 'patient_info' %}">Информация о пациенте</a></li>
+    <li><a href="{% url 'appointment_management' %}">Управление приемами</a></li>
+    <li><a href="{% url 'payments_view' %}">Платежи</a></li>
+</ul>
+
+{% endblock content %}
