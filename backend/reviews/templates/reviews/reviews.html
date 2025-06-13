@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Получить отзывы</button>
+    </form>
+
+    {% if reviews %}
+        <h2>Отзывы о враче {{ doctor }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Пациент</th>
+                    <th>Комментарий</th>
+                    <th>Оценка</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                    <tr>
+                        <td>{{ review.patient }}</td>
+                        <td>{{ review.comment }}</td>
+                        <td>{{ review.rating }}</td>
+                        <td>{{ review.date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if doctor %}
+            <a href="{% url 'download_reviews' doctor_id=doctor.doctor_id %}">Скачать отзывы</a>
+        {% endif %}
+    {% endif %}
+{% endblock content %}

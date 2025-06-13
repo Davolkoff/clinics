@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Управление приёмами</h1>
+
+    <h2>Добавить приём</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ add_form.as_p }}
+        <button type="submit" name="add_appointment">Добавить</button>
+    </form>
+
+    <h2>Список приёмов</h2>
+    <table>
+        <tr>
+            <th>Пациент</th>
+            <th>Доктор</th>
+            <th>Дата</th>
+            <th>Время</th>
+            <th>Действия</th>
+        </tr>
+        {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.patient }}</td>
+            <td>{{ appointment.doctor }}</td>
+            <td>{{ appointment.appointment_date }}</td>
+            <td>{{ appointment.appointment_time }}</td>
+            <td>
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="appointment_id" value="{{ appointment.appointment_id }}">
+                    <button type="submit" name="delete_appointment">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

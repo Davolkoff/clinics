@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Показать информацию</button>
+    </form>
+
+    {% if request.user.is_authenticated %}
+        <p>Вы вошли как: {{ request.user.username }}</p>
+    {% else %}
+        <p>Вы не авторизованы. Пожалуйста, войдите в систему.</p>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <h2>Информация о приёме</h2>
+        <p><strong>Дата:</strong> {{ appointment.appointment_date }}</p>
+        <p><strong>Время:</strong> {{ appointment.appointment_time }}</p>
+        <p><strong>Врач:</strong> {{ appointment.doctor.last_name }} {{ appointment.doctor.first_name }}</p>
+        <p><strong>Пациент:</strong> {{ appointment.patient.last_name }} {{ appointment.patient.first_name }}</p>
+
+        <h3>Услуги:</h3>
+        <ul>
+            {% for service in services %}
+                <li>{{ service.service.name }} ({{ service.quantity }} шт.) — {{ service.service.price }} руб.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Диагнозы:</h3>
+        <ul>
+            {% for diagnosis in diagnoses %}
+                <li>{{ diagnosis.diagnosis_name.name }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Оплата:</h3>
+        {% if payment %}
+            <p><strong>Тип оплаты:</strong> {{ payment.payment_type.name }}</p>
+            <p><strong>Дата оплаты:</strong> {{ payment.payment_date }}</p>
+        {% else %}
+            <p>Оплата отсутствует</p>
+        {% endif %}
+
+        {% if request.user.doctor_profile %}
+            <h3>Добавить диагноз</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ diagnosis_form.as_p }}
+                <button type="submit" name="add_diagnosis">Добавить диагноз</button>
+            </form>
+
+            <h3>Добавить услугу</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ service_form.as_p }}
+                <button type="submit" name="add_service">Добавить услугу</button>
+            </form>
+        {% endif %}
+    {% else %}
+        <p>Вы не авторизованы. Пожалуйста, войдите в систему.</p>
+    {% endif %}
+{% endblock content %}

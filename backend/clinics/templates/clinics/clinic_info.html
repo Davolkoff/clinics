@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Показать информацию</button>
+</form>
+
+{% if clinic %}
+    <h2>Информация о клинике</h2>
+    <p><strong>Название:</strong> {{ clinic.name }}</p>
+    <p><strong>Адрес:</strong> {{ clinic.address }}</p>
+    <p><strong>Часы работы:</strong> {{ clinic.working_hours }}</p>
+
+    <h3>Телефоны:</h3>
+    <ul>
+        {% for phone in phones %}
+            <li>{{ phone.phone_number }} ({{ phone.note }})</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Врачи и их специальности:</h3>
+    <ul>
+        {% for doctor in doctors_info %}
+            <li>{{ doctor.name }} — {{ doctor.specialities }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'download_clinic_info' clinic_id=clinic.clinic_id %}">Скачать информацию</a>
+{% endif %}
+{% endblock content %}

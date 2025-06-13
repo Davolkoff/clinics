@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Врачи по услуге</h1>
+
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Показать</button>
+    </form>
+
+    {% if selected_service %}
+        <h2>Услуга: {{ selected_service.name }}</h2>
+        <p>Цена: {{ selected_service.price }} руб.</p>
+
+        {% if doctors %}
+            <h3>Список врачей:</h3>
+            <ul>
+                {% for doctor in doctors %}
+                <li>
+                    <strong>ФИО:</strong> {{ doctor.last_name }} {{ doctor.first_name }} {{ doctor.middle_name }}<br>
+                    <strong>Клиника:</strong> {{ doctor.clinic.name }}<br>
+                    <strong>Специализации:</strong>
+                    {% for relation in doctor.doctorspecialityrelation_set.all %}
+                        {{ relation.speciality.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="{% url 'download_doctors_by_service' selected_service.service_id %}">Скачать список врачей</a>
+        {% else %}
+            <p>Нет врачей, предоставляющих эту услугу.</p>
+        {% endif %}
+    {% else %}
+        <p>Пожалуйста, выберите услугу, чтобы увидеть список врачей.</p>
+    {% endif %}
+{% endblock content %}
